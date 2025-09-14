@@ -65,8 +65,8 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("thanhthu15042004@gmail.com");
-        mailSender.setPassword("tbmqityuhgzhklaq");
+        mailSender.setUsername("");
+        mailSender.setPassword("");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

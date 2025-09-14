@@ -1,0 +1,108 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý tin tuyển dụng</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">QUẢN LÝ TIN TUYỂN DỤNG</h1>
+
+        <form th:action="@{/admin/jobs}" method="get" class="row g-3 mb-3">
+            <div class="col-12">
+                <input type="text" class="form-control" name="kw" placeholder="Từ khóa công việc..." th:value="${param.kw}">
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-select" name="majorId">
+                    <option value="">-- Chuyên ngành --</option>
+                    <option th:each="m : ${majors}" th:value="${m.majorId}" th:text="${m.majorName}" th:selected="${m.majorId == param.majorId}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="levelId">
+                    <option value="">-- Trình độ --</option>
+                    <option th:each="l : ${levels}" th:value="${l.levelId}" th:text="${l.levelName}" th:selected="${l.levelId == param.levelId}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="locationId">
+                    <option value="">-- Địa điểm --</option>
+                    <option th:each="loc : ${locations}" th:value="${loc.locationId}" th:text="${loc.locationName}" th:selected="${loc.locationId == param.locationId}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="salaryRange">
+                    <option value="">-- Mức lương --</option>
+                    <option value="1">&lt; 5 triệu</option>
+                    <option value="2">5 triệu - 10 triệu</option>
+                    <option value="3">10 triệu - 20 triệu</option>
+                    <option value="4">20 triệu - 30 triệu</option>
+                    <option value="5">&gt; 30 triệu</option>
+                </select>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <div class="mt-2 mb-2">
+            <a th:href="@{/admin/jobs/add}" class="btn btn-success">Thêm sản phẩm</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Công việc</th>
+                        <th>Nhà tuyển dụng</th>
+                        <th>Chuyên ngành</th>
+                        <th>Vị trí</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="j: ${jobs}">
+                        <td class="text-center" th:text="${j.jobId}"></td>
+                        <td th:text="${j.jobTitle}"></td>
+                        <td th:text="${j.employer.companyName}"></td>
+                        <td th:text="${j.major.majorName}"></td>
+                        <td th:text="${j.location.locationName}"></td>
+                        <td class="text-center">
+                            <a th:href="@{'/admin/jobs/' + ${j.jobId}}" class="btn btn-info">Xem</a>
+                            <a th:href="@{/admin/jobs/update/{id}(id=${j.jobId})}" class="btn btn-success">Cập nhật</a>
+                            <button class="btn btn-danger"
+                                    th:onclick="'deleteObj(\'' + @{/api/job/} + '\',' + ${j.jobId} + ')'">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                <a th:if="${page >= 2}"
+                   th:href="@{/admin/jobs(page=${page-1}, kw=${param.kw}, majorId=${param.majorId}, levelId=${param.levelId}, locationId=${param.locationId}, salaryRange=${param.salaryRange})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    &lt; Quay lại
+                </a>
+                <a th:if="${#lists.size(jobs) > 0}"
+                   th:href="@{/admin/jobs(page=${page+1}, kw=${param.kw}, majorId=${param.majorId}, levelId=${param.levelId}, locationId=${param.locationId}, salaryRange=${param.salaryRange})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    Xem thêm &gt;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+    <script th:src="@{/js/delete.js}"></script>
+</body>
+</html>

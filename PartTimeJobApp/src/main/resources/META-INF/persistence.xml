@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.thenthu.pojo.Joblevel</class>
+    <class>com.thenthu.pojo.Employer</class>
+    <class>com.thenthu.pojo.Candidate</class>
+    <class>com.thenthu.pojo.Role</class>
+    <class>com.thenthu.pojo.Notification</class>
+    <class>com.thenthu.pojo.Review</class>
+    <class>com.thenthu.pojo.Major</class>
+    <class>com.thenthu.pojo.Account</class>
+    <class>com.thenthu.pojo.Followcompany</class>
+    <class>com.thenthu.pojo.Resume</class>
+    <class>com.thenthu.pojo.Location</class>
+    <class>com.thenthu.pojo.Application</class>
+    <class>com.thenthu.pojo.Job</class>
+  </persistence-unit>
+</persistence>

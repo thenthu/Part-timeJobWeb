@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý địa điểm</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">
+            <span th:if="${location.locationId == null}">THÊM ĐỊA ĐIỂM</span>
+            <span th:if="${location.locationId != null}">CẬP NHẬT ĐỊA ĐIỂM</span>
+        </h1>
+
+        <form th:action="@{/admin/locations/add}" method="post" th:object="${location}" class="p-4 shadow rounded bg-light">
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="locationName" placeholder="Tên địa điểm" th:field="*{locationName}" required />
+                <label for="locationName">Tên địa điểm</label>
+            </div>
+
+            <input type="hidden" th:field="*{locationId}" />
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span th:if="${location.locationId == null}">Thêm địa điểm</span>
+                    <span th:if="${location.locationId != null}">Cập nhật địa điểm</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

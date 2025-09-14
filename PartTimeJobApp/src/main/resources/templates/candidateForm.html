@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý ứng viên</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">QUẢN LÝ ỨNG VIÊN</h1>
+
+        <form th:action="@{/admin/candidates/add}" method="post" enctype="multipart/form-data" th:object="${candidate}" class="p-4 shadow rounded bg-light">
+            <!-- Họ tên -->
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="fullName" placeholder="Họ tên ứng viên" th:field="*{fullName}" required />
+                <label for="fullName">Họ tên ứng viên</label>
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="phone" placeholder="Số điện thoại" th:field="*{phone}" required />
+                <label for="phone">Số điện thoại</label>
+            </div>
+
+            <!-- Giới tính -->
+            <div class="form-floating mb-4">
+                <select class="form-select" id="gender" th:field="*{gender}" required>
+                    <option value="" th:text="${#fields.hasErrors('gender') ? '' : '--Chọn giới tính--'}" disabled selected></option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+                <label for="sGender">Giới tính</label>
+            </div>
+
+            <!-- Ngày sinh -->
+            <div class="form-floating mb-4">
+                <input type="date" class="form-control" id="birthDate" placeholder="Ngày sinh" th:field="*{birthDate}" required />
+                <label for="birthDate">Ngày sinh</label>
+            </div>
+
+            <!-- Ảnh đại diện -->
+            <div class="mb-4">
+                <label for="avatar" class="form-label">Ảnh đại diện (avatar)</label>
+                <div th:if="*{avatar}">
+                    <img th:src="@{${candidate.avatar}}" alt="Avatar" style="max-width:100px; margin-top:8px;" />
+                </div>
+                <input type="file" class="form-control" id="avatar" th:field="*{avatarFile}" accept="image/*" />
+            </div>
+
+            <!-- Địa chỉ -->
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="address" placeholder="Địa chỉ chi tiết" th:field="*{address}" required />
+                <label for="address">Địa chỉ chi tiết</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <select class="form-select" id="accountId" th:field="*{account}">
+                    <option th:each="a: ${accounts}" th:value="${a.accountId}" th:text="${a.username}"></option>
+                </select>
+                <label for="accountId">Tài khoản</label>
+            </div>
+
+            <input type="hidden" th:field="*{avatar}" />
+            <input type="hidden" th:field="*{candidateId}" />
+
+            <!-- Nút submit -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span th:if="${candidate.candidateId == null}">Thêm ứng viên</span>
+                    <span th:if="${candidate.candidateId != null}">Cập nhật ứng viên</span>
+                </button>
+            </div>
+        </form>
+    </main>
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

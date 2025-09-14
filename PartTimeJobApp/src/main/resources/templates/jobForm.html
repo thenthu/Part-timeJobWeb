@@ -1,0 +1,103 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý tin tuyển dụng</title>
+        <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js"></script>
+    <script th:src="@{/js/slider.js}"></script>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">QUẢN LÝ TIN TUYỂN DỤNG</h1>
+
+        <form th:action="@{/admin/jobs/add}" method="post" enctype="multipart/form-data" th:object="${job}" class="p-4 shadow rounded bg-light">
+            <div class="form-floating mb-4">
+                <select class="form-select" id="employerId" th:field="*{employer}">
+                    <option th:each="e: ${employers}" th:value="${e.employerId}" th:text="${e.companyName}">1</option>
+                </select>
+                <label for="employerId">Công ty</label>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="jobTitle" placeholder="Tên công việc" th:field="*{jobTitle}" required />
+                <label for="jobTitle">Tên công việc</label>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="workAddress" placeholder="Địa chỉ" th:field="*{workAddress}" required />
+                <label for="workAddress">Địa chỉ</label>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Mức lương (VNĐ):</label>
+                <div id="salaryRange"></div>
+                <input type="hidden" th:field="*{minSalary}" id="minSalary" />
+                <input type="hidden" th:field="*{maxSalary}" id="maxSalary" />
+            </div>
+            <div class="form-floating mb-4">
+                <input type="number" class="form-control" id="quantity" placeholder="Số lượng" th:field="*{quantity}" required />
+                <label for="quantity">Số lượng</label>
+            </div>
+            <div class="mb-4">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="description" th:field="*{description}" rows="4" placeholder="Nhập mô tả chi tiết..."></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="candidateRequirement" class="form-label">Yêu cầu ứng viên</label>
+                <textarea class="form-control" id="candidateRequirement" th:field="*{candidateRequirement}" rows="3" placeholder="Điền yêu cầu ứng viên..."></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="relatedSkills" class="form-label">Kỹ năng liên quan</label>
+                <textarea class="form-control" id="relatedSkills" th:field="*{relatedSkills}" rows="3" placeholder="Liệt kê kỹ năng..."></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="benefits" class="form-label">Quyền lợi</label>
+                <textarea class="form-control" id="benefits" th:field="*{benefits}" rows="3" placeholder="Ghi quyền lợi khi ứng tuyển..."></textarea>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="workTime" placeholder="Thời gian làm việc" th:field="*{workTime}" required />
+                <label for="workTime">Thời gian làm việc</label>
+            </div>
+            <div class="form-floating mb-4">
+                <select class="form-select" id="levelId" th:field="*{jobLevel}">
+                    <option th:each="l: ${levels}" th:value="${l.levelId}" th:text="${l.levelName}">1</option>
+                </select>
+                <label for="levelId">Trình độ</label>
+            </div>
+            <div class="form-floating mb-4">
+                <select class="form-select" id="locationId" th:field="*{location}">
+                    <option th:each="loc: ${locations}" th:value="${loc.locationId}" th:text="${loc.locationName}">1</option>
+                </select>
+                <label for="locationId">Địa điểm</label>
+            </div>
+            <div class="form-floating mb-4">
+                <select class="form-select" id="majorId" th:field="*{major}">
+                    <option th:each="m: ${majors}" th:value="${m.majorId}" th:text="${m.majorName}">1</option>
+                </select>
+                <label for="majorId">Chuyên ngành</label>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="date" class="form-control" id="deadline" th:field="*{deadline}" required />
+                <label for="deadline">Hạn ứng tuyển</label>
+            </div>
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="status" th:field="*{status}" />
+                <label class="form-check-label" for="status">Hiển thị tin tuyển dụng</label>
+            </div>
+            <input type="hidden" th:field="*{jobId}" />
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span th:if="${job.jobId == null}">Thêm tin tuyển dụng</span>
+                    <span th:if="${job.jobId != null}">Cập nhật tin tuyển dụng</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+
+</html>

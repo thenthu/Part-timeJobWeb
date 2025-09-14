@@ -1,0 +1,70 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang chủ</title>
+    <th:context th:fragment="boostrap">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/menu.css}">
+        <script th:src="@{/js/menu.js}"></script>
+    </th:context>
+    <th:context th:fragment="resources">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/menu.css}">
+        <script th:src="@{/js/menu.js}"></script>
+    </th:context>
+</head>
+<body>
+    <nav th:fragment="header" class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler d-block me-3" type="button" id="sidebarToggle"
+                    style=" box-shadow: none; ">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">HỆ THỐNG QUẢN LÝ VÀ TÌM KIẾM VIỆC LÀM BÁN THỜI GIAN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav th:fragment="menu" id="sidebar">
+        <h4>MENU</h4>
+        <ul>
+            <li><a th:href="@{/admin}"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li><a th:href="@{/admin/jobs}"><i class="fas fa-briefcase"></i> Công việc</a></li>
+            <li><a th:href="@{/admin/employers}"><i class="fas fa-building"></i> Nhà tuyển dụng</a></li>
+            <li><a th:href="@{/admin/candidates}"><i class="fas fa-user-tie"></i> Ứng viên</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="danhMucDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-list"></i> Danh mục
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="danhMucDropdown">
+                    <li><a class="dropdown-item" th:href="@{/admin/levels}"><i class="fas fa-graduation-cap"></i> Trình độ</a></li>
+                    <li><a class="dropdown-item" th:href="@{/admin/majors}"><i class="fas fa-layer-group"></i> Chuyên ngành</a></li>
+                    <li><a class="dropdown-item" th:href="@{/admin/locations}"><i class="fas fa-map-marker-alt"></i> Địa điểm</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/admin/notifications}"><i class="fas fa-bell"></i> Thông báo</a></li>
+            <li><a th:href="@{/admin/accounts}"><i class="fas fa-users-cog"></i> Tài khoản</a></li>
+        </ul>
+    </nav>
+
+
+    <footer th:fragment="footer">
+        <div class="mt-4 p-5 bg-primary text-white rounded">
+            <h1>Vũ Trần Thanh Thư &copy; 2025</h1>
+            <p>Part-time Job Website - Mini Project</p>
+        </div>
+    </footer>
+</body>
+</html>
+

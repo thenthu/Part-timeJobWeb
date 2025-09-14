@@ -1,0 +1,91 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý nhà tuyển dụng</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">QUẢN LÝ NHÀ TUYỂN DỤNG</h1>
+
+        <form th:action="@{/admin/employers}" method="get" class="row g-3 mb-3">
+            <div class="col-9">
+                <input type="text" class="form-control" name="kw" placeholder="Từ khóa..." th:value="${param.kw}">
+            </div>
+            <div class="col-3">
+                <select class="form-select" name="verified">
+                    <option value="">-- Trạng thái --</option>
+                    <option value="true" th:selected="${param.verified == 'true'}">Đã duyệt</option>
+                    <option value="false" th:selected="${param.verified == 'false'}">Chưa duyệt</option>
+                </select>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <div class="mt-2 mb-2">
+            <a th:href="@{/employers/add}" class="btn btn-success">Thêm nhà tuyển dụng</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Avatar</th>
+                        <th>Tên công ty</th>
+                        <th>Mã số thuế</th>
+                        <th>Người đại diện</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="e: ${employers}">
+                        <td class="text-center" th:text="${e.employerId}"></td>
+                        <td class="text-center">
+                            <img class="avatar-img" th:src="${e.avatar}" alt="Avatar">
+                        </td>
+                        <td th:text="${e.companyName}"></td>
+                        <td th:text="${e.taxCode}"></td>
+                        <td th:text="${e.representativeName}"></td>
+                        <td th:text="${e.verified} ? 'Đã xét duyệt' : 'Chưa xét duyệt'"></td>
+                        <td class="text-center">
+                            <a th:href="@{'/admin/employers/' + ${e.employerId}}" class="btn btn-info">Xem</a>
+                            <a th:href="@{'/admin/employers/update/' + ${e.employerId}}" class="btn btn-success">Cập nhật️</a>
+                            <button class="btn btn-danger"
+                                    th:onclick="'deleteObj(\'' + @{/api/employer/} + '\',' + ${e.employerId} + ')'">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                <a th:if="${page >= 2}"
+                   th:href="@{/admin/employers(page=${page-1}, kw=${param.kw}, status=${param.status})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    &lt; Quay lại
+                </a>
+                <a th:if="${#lists.size(employers) > 0}"
+                   th:href="@{/admin/employers(page=${page+1}, kw=${param.kw}, status=${param.status})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    Xem thêm &gt;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+    <script th:src="@{/js/delete.js}"></script>
+</body>
+</html>
+

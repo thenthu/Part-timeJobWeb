@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý thông báo</title>
+        <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">QUẢN LÝ THÔNG BÁO</h1>
+
+        <form th:action="@{/admin/notifications}" method="get" class="row g-3 mb-3">
+            <div class="col-9">
+                <input type="text" class="form-control" name="kw" placeholder="Từ khóa..." th:value="${param.kw}">
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-select" name="accountId">
+                    <option value="">-- Người nhận --</option>
+                    <option th:each="a : ${accounts}" th:value="${a.accountId}" th:text="${a.username}" th:selected="${a.accountId == param.accountId}"></option>
+                </select>
+            </div>
+            
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <div class="mt-2 mb-2">
+            <a th:href="@{/admin/notifications/send}" class="btn btn-success">Gửi thông báo</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Nội dung</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày gửi</th>
+                        <th>Người nhận</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="n: ${notifications}">
+                        <td class="text-center" th:text="${n.notifId}"></td>
+                        <td th:text="${n.content}"></td>
+                        <td th:text="${n.read} == true ? 'Đã đọc' : 'Chưa đọc'"></td>
+                        <td th:text="${n.createdAt}"></td>
+                        <td th:text="${n.account.username}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+    
+    <script th:src="@{/js/delete.js}"></script>
+</body>
+</html>
+

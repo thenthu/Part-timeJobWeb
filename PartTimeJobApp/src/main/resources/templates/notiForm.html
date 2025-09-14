@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gửi thông báo</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+    <script>
+        function toggleReceiverBlock() {
+            const sendType = document.querySelector('input[name="sendType"]:checked').value;
+            document.getElementById('receiver-username-block').style.display = sendType === 'one' ? '' : 'none';
+            document.getElementById('receiver-group-block').style.display = sendType === 'group' ? '' : 'none';
+        }
+        document.addEventListener('DOMContentLoaded', toggleReceiverBlock);
+    </script>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">GỬI THÔNG BÁO</h1>
+        <form th:action="@{/admin/notifications/send}" th:object="${notification}" method="post" class="p-4 shadow rounded bg-light">
+            <!-- Chọn kiểu gửi -->
+            <div class="mb-4">
+                <label class="me-3">
+                    <input type="radio" name="sendType" value="one" checked onchange="toggleReceiverBlock()"> Gửi cho 1 người
+                </label>
+                <label>
+                    <input type="radio" name="sendType" value="group" onchange="toggleReceiverBlock()"> Gửi cho nhóm (Employer/Candidate)
+                </label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <select class="form-select" id="username-block" th:field="*{account}">
+                    <option th:each="a: ${accounts}" th:value="${a.username}" th:text="${a.username}">1</option>
+                </select>
+                <label for="username">Username người nhận</label>
+            </div>
+
+            <div id="receiver-group-block" class="form-floating mb-4" style="display: none;">
+                <select class="form-select" name="groupType" id="groupType">
+                    <option value="employer">Tất cả Employer</option>
+                    <option value="candidate">Tất cả Candidate</option>
+                    <option value="both">Cả Employer & Candidate</option>
+                </select>
+                <label for="groupType">Chọn nhóm nhận thông báo</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <textarea th:field="*{content}" class="form-control" id="content" placeholder="Nội dung" style="height: 100px" required></textarea>
+                <label for="content">Nội dung</label>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">Gửi thông báo</button>
+            </div>
+        </form>
+    </main>
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

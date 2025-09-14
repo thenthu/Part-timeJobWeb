@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý tin tuyển dụng</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">QUẢN LÝ TIN TUYỂN DỤNG</h1>
+
+        <form th:action="@{/admin/employers/add}" method="post" enctype="multipart/form-data" th:object="${employer}" class="p-4 shadow rounded bg-light">
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="companyName" placeholder="Tên công ty" th:field="*{companyName}" required />
+                <label for="companyName">Tên công ty</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="representativeName" placeholder="Tên đại diện" th:field="*{representativeName}" required />
+                <label for="representativeName">Tên đại diện</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="representativeTitle" placeholder="Chức vụ đại diện" th:field="*{representativeTitle}" required />
+                <label for="representativeTitle">Chức vụ đại diện</label>
+            </div>
+
+            <div class="mb-4">
+                <label for="avatar" class="form-label">Ảnh đại diện (avatar)</label>
+                <div th:if="*{avatar}">
+                    <img th:src="@{${employer.avatar}}" alt="Avatar" style="max-width:100px; margin-top:8px;" />
+                </div>
+                <input type="file" class="form-control" id="avatar" th:field="*{avatarFile}" accept="image/*" />
+            </div>
+
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="taxCode" placeholder="Mã số thuế" th:field="*{taxCode}" required />
+                <label for="taxCode">Mã số thuế</label>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Ảnh môi trường làm việc 1</label>
+                <div th:if="*{workEnvImg1}">
+                    <img th:src="@{${employer.workEnvImg1}}" alt="EnvImg1" style="max-width:100px; margin-top:8px;" />
+                </div>
+                <input type="file" class="form-control" th:field="*{workEnvImg1File}" accept="image/*" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Ảnh môi trường làm việc 2</label>
+                <div th:if="*{workEnvImg2}">
+                    <img th:src="@{${employer.workEnvImg2}}" alt="EnvImg2" style="max-width:100px; margin-top:8px;" />
+                </div>
+                <input type="file" class="form-control" th:field="*{workEnvImg2File}" accept="image/*" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Ảnh môi trường làm việc 3</label>
+                <div th:if="*{workEnvImg3}">
+                    <img th:src="@{${employer.workEnvImg3}}" alt="EnvImg3" style="max-width:100px; margin-top:8px;" />
+                </div>
+                <input type="file" class="form-control" th:field="*{workEnvImg3File}" accept="image/*" />
+            </div>
+
+            <div class="mb-4">
+                <label for="verifyDoc" class="form-label">Giấy tờ xác thực</label>
+                <div th:if="*{verifyDoc}">
+                    <a th:href="@{${employer.verifyDoc}}" target="_blank">Xem giấy tờ đã upload</a>
+                </div>
+                <input type="file" class="form-control" id="verifyDoc" th:field="*{verifyDocFile}" accept="image/*,application/pdf" />
+            </div>
+
+            <div class="form-floating mb-4">
+                <select class="form-select" id="accountId" th:field="*{account}">
+                    <option th:each="a: ${accounts}" th:value="${a.accountId}" th:text="${a.username}"></option>
+                </select>
+                <label for="accountId">Tài khoản</label>
+            </div>
+
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="verified" th:field="*{verified}" />
+                <label class="form-check-label" for="verified">Đã xét duyệt</label>
+            </div>
+
+            <input type="hidden" th:field="*{avatar}" />
+            <input type="hidden" th:field="*{workEnvImg1}" />
+            <input type="hidden" th:field="*{workEnvImg2}" />
+            <input type="hidden" th:field="*{workEnvImg3}" />
+            <input type="hidden" th:field="*{verifyDoc}" />
+            <input type="hidden" th:field="*{employerId}" />
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span th:if="${employer.employerId == null}">Thêm nhà tuyển dụng</span>
+                    <span th:if="${employer.employerId != null}">Cập nhật nhà tuyển dụng</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+
+</html>

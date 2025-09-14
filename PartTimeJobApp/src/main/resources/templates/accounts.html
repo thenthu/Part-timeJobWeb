@@ -1,0 +1,87 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý tài khoản</title>
+        <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">QUẢN LÝ TÀI KHOẢN</h1>
+
+        <form th:action="@{/admin/accounts}" method="get" class="row g-3 mb-3">
+            <div class="col-9">
+                <input type="text" class="form-control" name="kw" placeholder="Từ khóa..." th:value="${param.kw}">
+            </div>
+            <div class="col-3">
+                <select class="form-select" name="status">
+                    <option value="">-- Trạng thái --</option>
+                    <option value="true" th:selected="${param.status == 'true'}">Đang hoạt động</option>
+                    <option value="false" th:selected="${param.status == 'false'}">Bị khóa</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <div class="mt-2 mb-2">
+            <a th:href="@{/admin/accounts/add}" class="btn btn-success">Thêm tài khoản</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th>Vai trò</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="a : ${accounts}">
+                        <td class="text-center" th:text="${a.accountId}"></td>
+                        <td th:text="${a.username}"></td>
+                        <td th:text="${a.email}"></td>
+                        <td th:text="${a.status} == true ? 'Active' : 'Inactive'"></td>
+                        <td th:text="${a.role.roleName}"></td>
+                        <td class="text-center">
+                            <a th:href="@{'/admin/accounts/update/' + ${a.accountId}}" class="btn btn-success btn-sm">Cập nhật</a>
+                            <button class="btn btn-danger btn-sm"
+                                    th:onclick="'deleteObj(\'' + @{/api/accounts/} + '\',' + ${a.accountId} + ')'">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                <a th:if="${page >= 2}"
+                   th:href="@{/admin/accounts(page=${page-1}, kw=${param.kw}, status=${param.status})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    &lt; Quay lại
+                </a>
+                <a th:if="${#lists.size(accounts) > 0}"
+                   th:href="@{/admin/accounts(page=${page+1}, kw=${param.kw}, status=${param.status})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    Xem thêm &gt;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+    <script th:src="@{/js/delete.js}"></script>
+</body>
+</html>
+
+
+

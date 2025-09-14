@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý ứng viên</title>
+        <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">QUẢN LÝ ỨNG VIÊN</h1>
+
+        <form th:action="@{/admin/candidates}" method="get" class="row g-3 mb-3">
+            <div class="col-12">
+                <input type="text" class="form-control" name="kw" placeholder="Từ khóa..." th:value="${param.kw}">
+            </div>
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <div class="mt-2 mb-2">
+            <a th:href="@{/admin/candidates/add}" class="btn btn-success">Thêm ứng viên</a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Ảnh</th>
+                        <th>Tên ứng viên</th>
+                        <th>Địa chỉ</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${candidates}">
+                        <td class="text-center" th:text="${c.candidateId}"></td>
+                        <td class="text-center">
+                            <img class="avatar-img" th:src="${c.avatar}" alt="Avatar" style="width:48px;height:48px;border-radius:50%;">
+                        </td>
+                        <td th:text="${c.fullName}"></td>
+                        <td th:text="${c.address}"></td>
+                        <td class="text-center">
+                            <a th:href="@{'/admin/candidates/' + ${c.candidateId}}" class="btn btn-info">Xem</a>
+                            <a th:href="@{'/admin/candidates/update/' + ${c.candidateId}}" class="btn btn-success">Cập nhật</a>
+                            <button class="btn btn-danger"
+                                    th:onclick="'deleteObj(\'' + @{/api/candidate/} + '\',' + ${c.candidateId} + ')'">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                <a th:if="${page >= 2}"
+                   th:href="@{/admin/candidates(page=${page-1}, kw=${param.kw})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    &lt; Quay lại
+                </a>
+                <a th:if="${#lists.size(candidates) > 0}"
+                   th:href="@{/admin/candidates(page=${page+1}, kw=${param.kw})}"
+                   class="btn btn-outline-success rounded-pill px-4">
+                    Xem thêm &gt;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+    <script th:src="@{/js/delete.js}"></script>
+</body>
+</html>
+
+

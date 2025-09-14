@@ -1,0 +1,207 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Chi tiết ứng viên</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+    <style>
+        .avatar-detail {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            margin-bottom: 1em;
+        }
+        .tab-content {
+            padding-top: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">CHI TIẾT ỨNG VIÊN</h1>
+
+        <div class="row mb-4">
+            <div class="col-md-3 text-center">
+                <img th:src="${candidate.avatar}" alt="Avatar" class="avatar-detail" th:if="${candidate.avatar != null}">
+            </div>
+            <div class="col-md-9">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td th:text="${candidate.fullName}"></td>
+                        </tr><tr>
+                            <th>Username:</th>
+                            <td th:text="${candidate.account.username}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="detailTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="resumes-tab" data-bs-toggle="tab" data-bs-target="#resumes" type="button" role="tab">Hồ sơ</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="applications-tab" data-bs-toggle="tab" data-bs-target="#applications" type="button" role="tab">Đơn ứng tuyển</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="follow-tab" data-bs-toggle="tab" data-bs-target="#follow" type="button" role="tab">Công ty đang theo dõi</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-written-tab" data-bs-toggle="tab" data-bs-target="#reviews-written" type="button" role="tab">Đánh giá đã viết</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-received-tab" data-bs-toggle="tab" data-bs-target="#reviews-received" type="button" role="tab">Đánh giá nhận được</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="detailTabContent">
+            <div class="tab-pane fade show active" id="resumes" role="tabpanel" aria-labelledby="resumes-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${resumes != null and #lists.size(resumes) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Tên hồ sơ</th>
+                            <th>Chuyên ngành</th>
+                            <th>Trình độ</th>
+                            <th>Kinh nghiệm</th>
+                            <th>Kỹ năng</th>
+                            <th>Học vấn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r : ${resumes}">
+                            <td class="text-center" th:text="${r.resumeId}"></td>
+                            <td th:text="${r.resumeName}"></td>
+                            <td th:text="${r.major.majorName}"></td>
+                            <td th:text="${r.level.levelName}"></td>
+                            <td th:text="${r.experience}"></td>
+                            <td th:text="${r.skills}"></td>
+                            <td th:text="${r.education}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${resumes == null or #lists.size(resumes) == 0}">
+                    <em>Chưa có hồ sơ nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applications-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${applications != null and #lists.size(applications) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>Vị trí ứng tuyển</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày ứng tuyển</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td th:text="${app.jobPost.jobTitle}"></td>
+                            <td th:text="${app.status}"></td>
+                            <td th:text="${app.applyDate}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${applications == null or #lists.size(applications) == 0}">
+                    <em>Chưa có đơn ứng tuyển nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="follow" role="tabpanel" aria-labelledby="follow-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${followCompanies != null and #lists.size(followCompanies) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>Tên công ty</th>
+                            <th>Ngày theo dõi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="fc : ${followCompanies}">
+                            <td th:text="${fc.employer.companyName}"></td>
+                            <td th:text="${fc.followedAt}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${followCompanies == null or #lists.size(followCompanies) == 0}">
+                    <em>Chưa theo dõi công ty nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reviews-written" role="tabpanel" aria-labelledby="reviews-written-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${reviewsWritten != null and #lists.size(reviewsWritten) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Đối tượng</th>
+                            <th>Nội dung</th>
+                            <th>Ngày</th>
+                            <th>Điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rv : ${reviewsWritten}">
+                            <td class="text-center" th:text="${rv.reviewId}"></td>
+                            <td th:text="${rv.toAccount.username}"></td>
+                            <td th:text="${rv.comment}"></td>
+                            <td th:text="${rv.createdAt}"></td>
+                            <td th:text="${rv.rating}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${reviewsWritten == null or #lists.size(reviewsWritten) == 0}">
+                    <em>Bạn chưa viết đánh giá nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reviews-received" role="tabpanel" aria-labelledby="reviews-received-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${reviewsReceived != null and #lists.size(reviewsReceived) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Người đánh giá</th>
+                            <th>Nội dung</th>
+                            <th>Ngày</th>
+                            <th>Điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rv : ${reviewsReceived}">
+                            <td class="text-center" th:text="${rv.reviewId}"></td>
+                            <td th:text="${rv.fromAccount.username}"></td>
+                            <td th:text="${rv.comment}"></td>
+                            <td th:text="${rv.createdAt}"></td>
+                            <td th:text="${rv.rating}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                    <a th:if="${page >= 2}"
+                       th:href="@{/admin/candidates/{id}(id=${candidate.candidateId}, page=${page-1})}"
+                       class="btn btn-outline-success rounded-pill px-4">
+                        &lt; Quay lại
+                    </a>
+                    <a th:if="${#lists.size(reviewsReceived) > 0}"
+                       th:href="@{/admin/candidates/{id}(id=${candidate.candidateId}, page=${page+1})}"
+                       class="btn btn-outline-success rounded-pill px-4">
+                        Xem thêm &gt;
+                    </a>
+                </div>
+
+                <div th:if="${reviewsReceived == null or #lists.size(reviewsReceived) == 0}">
+                    <em>Chưa có đánh giá nào.</em>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

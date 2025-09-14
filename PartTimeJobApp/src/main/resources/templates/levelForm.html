@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý trình độ</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-4 mb-4">
+            <span th:if="${level.levelId == null}">THÊM TRÌNH ĐỘ</span>
+            <span th:if="${level.levelId != null}">CẬP NHẬT TRÌNH ĐỘ</span>
+        </h1>
+
+        <form th:action="@{/admin/levels/add}" method="post" th:object="${level}" class="p-4 shadow rounded bg-light">
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="levelName" placeholder="Tên trình độ" th:field="*{levelName}" required />
+                <label for="levelName">Tên trình độ</label>
+            </div>
+
+            <input type="hidden" th:field="*{levelId}" />
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span th:if="${level.levelId == null}">Thêm trình độ</span>
+                    <span th:if="${level.levelId != null}">Cập nhật trình độ</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

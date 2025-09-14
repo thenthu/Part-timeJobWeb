@@ -1,0 +1,206 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Chi tiết nhà tuyển dụng</title>
+    <th:context th:replace="base :: boostrap"></th:context>
+    <th:context th:replace="base :: resources"></th:context>
+    <style>
+        .avatar-detail {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            margin-bottom: 1em;
+        }
+        .tab-content {
+            padding-top: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:replace="base :: menu"></div>
+
+    <main class="container mt-4">
+        <h1 class="text-center text-primary mb-4">CHI TIẾT NHÀ TUYỂN DỤNG</h1>
+
+        <div class="row mb-4">
+            <div class="col-md-3 text-center">
+                <img th:src="${employer.avatar}" alt="Avatar" class="avatar-detail" th:if="${employer.avatar != null}">
+            </div>
+            <div class="col-md-9">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th>Tên công ty:</th>
+                            <td th:text="${employer.companyName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Username:</th>
+                            <td th:text="${employer.account.username}"></td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td th:text="${employer.account.email}"></td>
+                        </tr>
+                        <tr>
+                            <th>Đại diện:</th>
+                            <td th:text="${employer.representativeName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Mã số thuế:</th>
+                            <td th:text="${employer.taxCode}"></td>
+                        </tr>
+                        <tr>
+                            <th>Số người theo dõi:</th>
+                            <td th:text="${followerCount}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="detailTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab">Tin tuyển dụng</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="follow-tab" data-bs-toggle="tab" data-bs-target="#follow" type="button" role="tab">Người theo dõi theo dõi</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-written-tab" data-bs-toggle="tab" data-bs-target="#reviews-written" type="button" role="tab">Đánh giá đã viết</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-received-tab" data-bs-toggle="tab" data-bs-target="#reviews-received" type="button" role="tab">Đánh giá nhận được</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="detailTabContent">
+
+            <div class="tab-pane fade show active" id="jobs" role="tabpanel" aria-labelledby="jobs-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${jobs != null and #lists.size(jobs) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Tiêu đề</th>
+                            <th>Ngày đăng</th>
+                            <th>Hạn nộp</th>
+                            <th>Địa điểm</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="j : ${jobs}">
+                            <td class="text-center" th:text="${j.jobId}"></td>
+                            <td th:text="${j.jobTitle}"></td>
+                            <td th:text="${j.postedDate}"></td>
+                            <td th:text="${j.deadline}"></td>
+                            <td th:text="${j.location.locationName}"></td>
+                            <td th:text="${j.status} ? 'Đang hiển thị' : 'Đang ẩn'"></td>
+                            <td>
+                                <a th:href="@{'/jobs/' + ${j.jobId}}" class="btn btn-info btn-sm">Xem</a>
+                                <button class="btn btn-danger btn-sm"
+                                        th:onclick="'deleteObj(\'' + @{/api/jobs/} + '\',' + ${j.jobId} + ')'">
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${jobs == null or #lists.size(jobs) == 0}">
+                    <em>Chưa đăng tin tuyển dụng nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="follow" role="tabpanel" aria-labelledby="follow-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${followCompanies != null and #lists.size(followCompanies) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>Tên người theo dõi</th>
+                            <th>Ngày theo dõi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="fc : ${followCompanies}">
+                            <td th:text="${fc.candidate.fullName}"></td>
+                            <td th:text="${fc.followedAt}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${followCompanies == null or #lists.size(followCompanies) == 0}">
+                    <em>Chưa có người theo dõi.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reviews-written" role="tabpanel" aria-labelledby="reviews-written-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${reviewsWritten != null and #lists.size(reviewsWritten) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Đối tượng</th>
+                            <th>Nội dung</th>
+                            <th>Ngày</th>
+                            <th>Điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rv : ${reviewsWritten}">
+                            <td class="text-center" th:text="${rv.reviewId}"></td>
+                            <td th:text="${rv.toAccount.username}"></td>
+                            <td th:text="${rv.comment}"></td>
+                            <td th:text="${rv.createdAt}"></td>
+                            <td th:text="${rv.rating}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${reviewsWritten == null or #lists.size(reviewsWritten) == 0}">
+                    <em>Bạn chưa viết đánh giá nào.</em>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reviews-received" role="tabpanel" aria-labelledby="reviews-received-tab">
+                <table class="table table-bordered table-hover align-middle" th:if="${reviewsReceived != null and #lists.size(reviewsReceived) > 0}">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th>Người đánh giá</th>
+                            <th>Nội dung</th>
+                            <th>Ngày</th>
+                            <th>Điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rv : ${reviewsReceived}">
+                            <td class="text-center" th:text="${rv.reviewId}"></td>
+                            <td th:text="${rv.fromAccount.username}"></td>
+                            <td th:text="${rv.comment}"></td>
+                            <td th:text="${rv.createdAt}"></td>
+                            <td th:text="${rv.rating}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                    <a th:if="${page >= 2}"
+                       th:href="@{/admin/employers/{id}(id=${employer.employerId}, page=${page-1})}"
+                       class="btn btn-outline-success rounded-pill px-4">
+                        &lt; Quay lại
+                    </a>
+                    <a th:if="${#lists.size(reviewsReceived) > 0}"
+                       th:href="@{/admin/employers/{id}(id=${employer.employerId}, page=${page+1})}"
+                       class="btn btn-outline-success rounded-pill px-4">
+                        Xem thêm &gt;
+                    </a>
+                </div>
+
+                <div th:if="${reviewsReceived == null or #lists.size(reviewsReceived) == 0}">
+                    <em>Chưa có đánh giá nào.</em>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
